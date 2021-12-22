@@ -1,3 +1,4 @@
+require('dotenv').config();
 import './util/module-alias';
 import { Server } from '@overnightjs/core';
 import bodyParser from 'body-parser';

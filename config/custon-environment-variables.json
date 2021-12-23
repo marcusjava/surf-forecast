@@ -5,13 +5,15 @@
       "mongoUrl": "MONGODB_URL"
     },
     "resources": {
-      "stormGlass": {
+      "StormGlass": {
         "apiUrl": "STORM_GLASS_API_URL",
-        "apiToken": "STORM_GLASS_API_TOKEN"
+        "apiToken": "STORM_GLASS_API_TOKEN",
+        "cacheApiTtl": "STORM_GLASS_API_CACHE_TTL"
       }
     },
     "auth": {
-      "key": "JWT_SECRET_KEY"
+      "key": "JWT_SECRET_KEY",
+      "tokenExpiresIn": "JWT_EXPIRES_IN"
     }
   }
 }

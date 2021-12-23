@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "start": "yarn build && nodemon dist/src/index.js",
+    "start": "node dist/src/index.js",
     "start:local": "dotenv -e .env -- ts-node-dev --transpile-only src/index.ts | pino-pretty -c",
     "test": "yarn lint && yarn style:check && yarn test:unit && yarn test:functional",
     "lint": "eslint ./src ./test --ext .ts",

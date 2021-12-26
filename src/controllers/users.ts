@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@overnightjs/core';
+import { Controller, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { User } from '@src/models/user';
 import { BaseController } from '@src/controllers';
@@ -23,12 +23,16 @@ export class UsersController extends BaseController {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(401).send({ cod: 401, error: 'User not found' });
+      return this.sendErrorResponse(res, {
+        code: 401,
+        message: 'User not found',
+      });
     }
     if (!(await AuthService.comparePasswords(password, user.password))) {
-      return res
-        .status(401)
-        .send({ cod: 401, error: 'Password does not match' });
+      return this.sendErrorResponse(res, {
+        code: 401,
+        message: 'Password does not match',
+      });
     }
 
     //generating token

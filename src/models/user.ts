@@ -1,4 +1,4 @@
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import { AuthService } from '@src/services/auth';
 import logger from '@src/logger';
 

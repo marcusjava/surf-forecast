@@ -41,7 +41,8 @@ describe('Users functional tests', () => {
       expect(status).toBe(422);
       expect(body).toEqual({
         code: 422,
-        error: 'User validation failed: name: Path `name` is required.',
+        error: 'Unprocessable Entity',
+        message: 'User validation failed: name: Path `name` is required.',
       });
     });
     it('Should return 409 when email already exists', async () => {
@@ -59,7 +60,9 @@ describe('Users functional tests', () => {
       expect(status).toBe(409);
       expect(body).toEqual({
         code: 409,
-        error: 'User validation failed: email: already exists in the database.',
+        error: 'Conflict',
+        message:
+          'User validation failed: email: already exists in the database.',
       });
     });
   });
@@ -74,7 +77,7 @@ describe('Users functional tests', () => {
 
       await new User(user).save();
 
-      const { body, status } = await global.testRequest
+      const { body } = await global.testRequest
         .post('/users/authenticate')
         .send({ email: user.email, password: user.password });
 

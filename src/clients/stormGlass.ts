@@ -1,6 +1,3 @@
-import stormGlass3HourNormalized from '@test/fixtures/stormglass_normalized_response_3_hours.json';
-import { AxiosStatic } from 'axios';
-import stormGlass3HourFixture from '@test/fixtures/stormglass_weather_3_hours.json';
 import * as HTTPUtil from '@src/util/request';
 import { InternalError } from '@src/util/errors/internal-error';
 import config, { IConfig } from 'config';

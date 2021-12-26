@@ -3,6 +3,8 @@ import './util/module-alias';
 import { Server } from '@overnightjs/core';
 import bodyParser from 'body-parser';
 import { Application } from 'express';
+import cors from 'cors';
+import expressPino from 'express-pino-logger';
 import { ForecastController } from './controllers/forecast';
 import * as database from '@src/database';
 import { BeachesController } from './controllers/beaches';
@@ -22,6 +24,12 @@ export class SetupServer extends Server {
 
   private setupExpress(): void {
     this.app.use(bodyParser.json());
+    this.app.use(expressPino({ logger }));
+    this.app.use(
+      cors({
+        origin: '*',
+      })
+    );
   }
   private async setupMongo(): Promise<void> {
     await database.connect();

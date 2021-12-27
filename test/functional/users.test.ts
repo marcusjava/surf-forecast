@@ -1,3 +1,4 @@
+import logger from '@src/logger';
 import { User } from '@src/models/user';
 import { AuthService } from '@src/services/auth';
 
@@ -104,6 +105,36 @@ describe('Users functional tests', () => {
         .send({ email: newUser.email, password: 'different password' });
 
       expect(response.status).toBe(401);
+    });
+  });
+
+  describe('When getting profile information', () => {
+    it(`Should return the token's owner profile information`, async () => {
+      const newUser = {
+        name: 'John Doe',
+        email: 'john@mail.com',
+        password: '1234',
+      };
+      const user = await new User(newUser).save();
+      logger.info(user);
+      const token = AuthService.generateToken(user.toJSON());
+      const { body, status } = await global.testRequest
+        .get('/users/me')
+        .set({ 'x-access-token': token });
+
+      expect(status).toBe(200);
+      expect(body).toMatchObject(JSON.parse(JSON.stringify({ user })));
+    });
+
+    it(`Should return Not Found, when the user is not found`, async () => {
+      //create a new user but don't save it
+      const token = AuthService.generateToken({ id: 'fake-user-id' });
+      const { body, status } = await global.testRequest
+        .get('/users/me')
+        .set({ 'x-access-token': token });
+
+      expect(status).toBe(404);
+      expect(body.message).toBe('User not found!');
     });
   });
 });

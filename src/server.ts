@@ -10,6 +10,11 @@ import * as database from '@src/database';
 import { BeachesController } from './controllers/beaches';
 import { UsersController } from './controllers/users';
 import logger from './logger';
+import apiSchema from './api-schema.json';
+import { apiErrorValidator } from './middlewares/api-error-validator';
+import swaggerUi from 'swagger-ui-express';
+import * as OpenApiValidator from 'express-openapi-validator';
+import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
 
 export class SetupServer extends Server {
   constructor(private port = 3000) {
@@ -18,8 +23,10 @@ export class SetupServer extends Server {
 
   public async init(): Promise<void> {
     this.setupExpress();
+    this.docsSetup();
     this.setupController();
     await this.setupMongo();
+    this.setupErrorHandlers();
   }
 
   private setupExpress(): void {
@@ -43,6 +50,21 @@ export class SetupServer extends Server {
     this.app.listen(this.port, () => {
       logger.info(`Server working and listening on port ${this.port}`);
     });
+  }
+
+  private setupErrorHandlers(): void {
+    this.app.use(apiErrorValidator);
+  }
+
+  private async docsSetup(): Promise<void> {
+    this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(apiSchema));
+    this.app.use(
+      OpenApiValidator.middleware({
+        apiSpec: apiSchema as OpenAPIV3.Document,
+        validateRequests: true, //we do it
+        validateResponses: true,
+      })
+    );
   }
 
   private setupController(): void {

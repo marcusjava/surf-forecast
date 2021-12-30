@@ -28,6 +28,7 @@ export class UsersController extends BaseController {
       return this.sendErrorResponse(res, {
         code: 401,
         message: 'User not found',
+        description: 'Try verifying your email address.',
       });
     }
     if (!(await AuthService.comparePasswords(password, user.password))) {
@@ -49,7 +50,6 @@ export class UsersController extends BaseController {
 
     const user = await User.findOne({ email });
 
-    console.info(user);
     if (!user) {
       return this.sendErrorResponse(res, {
         code: 404,
